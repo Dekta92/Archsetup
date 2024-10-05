@@ -1,7 +1,7 @@
 sudo timedatectl set-timezone Etc/GMT-5
 
 
-read -p "Do you want to set up any partitions first? (y/N): " response
+read -p "Do you want to set up partitions first? (y/N): " response
 
 response=${response,,}
 if [[ -z "$response" ]]; then
@@ -20,15 +20,16 @@ fi
 clear
 
 echo -e "\033[1;36mWhat will be your main drive for Arch? (e.g. /dev/sda, /dev/sdb1)\033[0m"
-fdisk -l | grep /dev/sd | awk '{print "\033[1;37m" $0 "\033[0m"}'
+fdisk -l | grep /dev | awk '{print "\033[1;37m" $0 "\033[0m"}'
 read -p "Enter your choice: " main_drive
 echo "You have selected: $main_drive"
 
 echo "Now formatting $main_drive in 5 seconds (Press Ctrl + C to abort script)"
 sleep 5
-mkfs.ext4 "${main_drive}1"
-
+mkfs.ext4 "${main_drive}"
 mount $main_drive /mnt
+
+pacstrap -K /mnt base linux linux-firmware
 genfstab /mnt > /mnt/etc/fstab
 arch-chroot /mnt bash -c 'pacman -Sy grub; grub-install $main_drive; grub-mkconfig -o /boot/grub/grub.cfg'
 
