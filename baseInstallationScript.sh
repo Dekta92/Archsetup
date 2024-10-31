@@ -28,11 +28,11 @@ read -p "Do you want to set up cfdisk to set up partitions?(y/N) " response
 response=${response,,}
 if [[ "$response" == "y" ]]; then
     cfdisk
-elif [[ -z "$response" || "$response" != "n" ]]; then
+elif [[ -z "$response" || "$response" == "n" ]]; then
+    echo "Skipping partition setup."
+else
     echo "Invalid input. Script aborting."
     exit 1
-else
-    echo "Skipping partition setup."
 fi
 
 
