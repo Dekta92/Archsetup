@@ -3,7 +3,7 @@ clear
 sudo timedatectl set-timezone Etc/GMT-5
 
 # Ensure dependencies are met
-sudo pacman -Sy arch-install-scripts
+sudo pacman -Sy --noconfirm arch-install-scripts
 
 if [ -d /sys/firmware/efi ]; then
     echo ""
@@ -28,11 +28,11 @@ else
 fi
 echo ""
 
-read -p "Do you want to set up cfdisk to set up partitions?(y/N) " response
+read -p "Do you want to use cfdisk to set up partitions?(Y/n) " response
 response=${response,,}
-if [[ "$response" == "y" ]]; then
+if [[ -z "$response" || "$response" == "y" ]]; then
     cfdisk
-elif [[ -z "$response" || "$response" == "n" ]]; then
+elif [[ "$response" == "n" ]]; then
     echo "Skipping partition setup."
 else
     echo "Invalid input. Script aborting."
