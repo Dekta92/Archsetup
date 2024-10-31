@@ -72,44 +72,11 @@ else
 fi
 
 
+# GRUB Installation
+
 pacstrap -K /mnt base linux linux-firmware
 genfstab /mnt >> /mnt/etc/fstab
 
-
-
-# Account Creation
-
-echo -e "\033[1;36mWhat will be your desired username?\033[0m"
-read -p "Enter your desired username: " username
-
-while true; do
-    echo -e "\033[1;36mWhat will be your desired password?\033[0m"
-    read -s -p "Enter your desired password: " password
-    echo ""
-    read -s -p "Confirm your desired password: " password_confirm
-    echo ""
-
-    if [ "$password" == "$password_confirm" ]; then
-        break
-    else
-        echo -e "\033[1;31mPasswords do not match. Please try again.\033[0m"
-    fi
-done
-
-arch-chroot /mnt /bin/bash <<EOF
-
-useradd -m -G wheel "$username"
-
-chpasswd <<EOL
-$username:$password
-EOL
-
-echo "$username ALL=(ALL) ALL" >> /etc/sudoers.d/$username
-EOF
-
-
-
-# GRUB installation
 if [ -d /sys/firmware/efi ]; then
     arch-chroot /mnt bash -c "pacman -Sy --noconfirm grub efibootmgr; grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=ArchLinux; grub-mkconfig -o /boot/grub/grub.cfg"
 else
@@ -117,3 +84,10 @@ else
 fi
 
 echo -e "\033[1;36m Please chroot into drive or reboot to view changes\033[0m"
+
+
+
+# Account Creation
+
+read -p "Enter your desired username: " username
+arch-chroot /mnt bash -c "useradd -m -G wheel $username; passwd $username"
