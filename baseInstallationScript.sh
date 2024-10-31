@@ -26,14 +26,16 @@ echo ""
 
 read -p "Do you want to set up cfdisk to set up partitions?(y/N) " response
 response=${response,,}
-if [[ -z "$response" ]]; then
-    response="n"
-elif [[ "$response" == "n" ]]; then
-    echo "Skipping partition setup."
-else
+if [[ "$response" == "y" ]]; then
+    cfdisk
+elif [[ -z "$response" || "$response" != "n" ]]; then
     echo "Invalid input. Script aborting."
     exit 1
+else
+    echo "Skipping partition setup."
 fi
+
+
 
 echo -e "\033[1;36mWhat will be your main drive for Arch? (e.g. /dev/sda, /dev/nvme0n1)\033[0m"
 fdisk -l | grep /dev | awk '{print "\033[1;37m" $0 "\033[0m"}'
