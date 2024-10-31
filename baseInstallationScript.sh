@@ -3,7 +3,13 @@ clear
 sudo timedatectl set-timezone Etc/GMT-5
 
 # Ensure dependencies are met
+
 sudo pacman -Sy --noconfirm arch-install-scripts
+clear
+
+
+
+# Disk Partitioning
 
 if [ -d /sys/firmware/efi ]; then
     echo ""
@@ -41,7 +47,11 @@ fi
 
 
 
-echo -e "\033[1;36mWhat will be your main drive for Arch? (e.g. /dev/sda. Do NOT type partition names like /dev/sda1)\033[0m"
+# Creating filesystem
+
+echo -e "\033[1;36mWhat will be your main drive for Arch?\033[0m"
+echo -e "\033[38;5;214m (e.g. /dev/sda. Do NOT type partition names like /dev/sda1)\033[0m"
+
 fdisk -l | grep /dev | awk '{print "\033[1;37m" $0 "\033[0m"}'
 read -p "Enter your choice: " main_drive
 echo -e "You have selected: \033[1;36m$main_drive\033[0m"
@@ -66,13 +76,25 @@ pacstrap -K /mnt base linux linux-firmware
 genfstab /mnt >> /mnt/etc/fstab
 
 
+
 # Account Creation
 
 echo -e "\033[1;36mWhat will be your desired username?\033[0m"
 read -p "Enter your desired username: " username
 
-echo -e "\033[1;36mWhat will be your desired password?\033[0m"
-read -s -p "Enter your desired password: " password
+while true; do
+    echo -e "\033[1;36mWhat will be your desired password?\033[0m"
+    read -s -p "Enter your desired password: " password
+    echo ""
+    read -s -p "Confirm your desired password: " password_confirm
+    echo ""
+
+    if [ "$password" == "$password_confirm" ]; then
+        break
+    else
+        echo -e "\033[1;31mPasswords do not match. Please try again.\033[0m"
+    fi
+done
 
 arch-chroot /mnt /bin/bash <<EOF
 
@@ -84,6 +106,8 @@ EOL
 
 echo "$username ALL=(ALL) ALL" >> /etc/sudoers.d/$username
 EOF
+
+
 
 # GRUB installation
 if [ -d /sys/firmware/efi ]; then
