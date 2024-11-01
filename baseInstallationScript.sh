@@ -80,7 +80,7 @@ genfstab /mnt >> /mnt/etc/fstab
 if [ -d /sys/firmware/efi ]; then
     arch-chroot /mnt bash -c "pacman -Sy --noconfirm grub efibootmgr; grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=ArchLinux; grub-mkconfig -o /boot/grub/grub.cfg"
 else
-    arch-chroot /mnt bash -c "pacman -Sy --noconfirm grub sudo; grub-install --target=i386-pc $main_drive; grub-mkconfig -o /boot/grub/grub.cfg"
+    arch-chroot /mnt bash -c "pacman -Sy --noconfirm grub; grub-install --target=i386-pc $main_drive; grub-mkconfig -o /boot/grub/grub.cfg"
 fi
 
 
@@ -88,7 +88,7 @@ fi
 # Hostname setup and Account Creation
 
 read -p "What is your desired hostname for the system? " hostname
-arch-chroot /mnt bash -c "hostnamectl set-hostname '$hostname'"
+arch-chroot /mnt bash -c "pacman -S sudo; hostnamectl set-hostname '$hostname'"
 
 echo "Please set the root password for your system now"
 arch-chroot /mnt bash -c "sudo passwd"
