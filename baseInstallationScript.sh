@@ -87,7 +87,10 @@ echo -e "\033[1;36m Please chroot into drive or reboot to view changes\033[0m"
 
 
 
-# Account Creation
+# Hostname setup and Account Creation
+
+read -p "What is your desired hostname for the system? " hostname
+arch-chroot /mnt bash -c "hostnamectl set-hostname '$hostname' && echo '127.0.1.1   $hostname' >> /etc/hosts"
 
 read -p "Enter your desired username: " username
 arch-chroot /mnt bash -c "useradd -m -G wheel '$username' && passwd '$username'"
