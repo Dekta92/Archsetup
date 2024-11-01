@@ -90,4 +90,4 @@ echo -e "\033[1;36m Please chroot into drive or reboot to view changes\033[0m"
 # Account Creation
 
 read -p "Enter your desired username: " username
-arch-chroot /mnt bash -c "useradd -m -G wheel $username; passwd $username"
+arch-chroot /mnt bash -c "useradd -m -G wheel '$username' && passwd '$username'"
