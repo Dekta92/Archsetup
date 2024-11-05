@@ -56,7 +56,8 @@ fdisk -l | grep /dev | awk '{print "\033[1;37m" $0 "\033[0m"}'
 read -p "Enter your choice: " main_drive
 echo -e "You have selected: \033[1;36m$main_drive\033[0m"
 
-echo "\e[31mNow formatting partitions in 5 seconds (Press Ctrl + C to abort script)\e[0m"
+echo -e "\e[31mNow formatting partitions in 5 seconds (Press Ctrl + C to abort script)\e[0m"
+
 sleep 5
 if [ -d /sys/firmware/efi ]; then
     # For UEFI system
@@ -87,13 +88,15 @@ fi
 
 # Hostname setup and Account Creation
 
-read -p "What is your desired hostname for the system? " hostname
-arch-chroot /mnt bash -c "pacman -S sudo; hostnamectl set-hostname '$hostname'"
+echo -e "\e[1;37mWhat is your desired hostname for the system?\e[0m"
+read hostname
+arch-chroot /mnt bash -c "pacman -S --noconfirm sudo; hostnamectl set-hostname '$hostname'"
 
-echo "Please set the root password for your system now"
+echo -e "\e[1;37mPlease set the root password for your system now\e[0m"
 arch-chroot /mnt bash -c "sudo passwd"
 
-read -p "Enter your desired username: " username
+echo -e "\e[1;37mEnter your desired username:\e[0m"
+read username
 arch-chroot /mnt bash -c "useradd -m -G wheel '$username' && passwd '$username'"
 
 echo -e "\e[1;32mScript has finished! :D\e[0m"
