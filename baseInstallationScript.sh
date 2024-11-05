@@ -90,14 +90,19 @@ fi
 
 echo -e "\e[1;37mWhat is your desired hostname for the system?\e[0m"
 read hostname
-arch-chroot /mnt bash -c "pacman -S --noconfirm sudo; hostnamectl set-hostname '$hostname'"
+arch-chroot /mnt bash -c "pacman -S --noconfirm sudo; echo "$hostname" > /etc/hostname"
 
 echo -e "\e[1;37mPlease set the root password for your system now\e[0m"
 arch-chroot /mnt bash -c "sudo passwd"
 
-echo -e "\e[1;37mEnter your desired username:\e[0m"
+echo -e "\e[1;37mPlease enter your desired username:\e[0m"
 read username
-arch-chroot /mnt bash -c "useradd -m -G wheel '$username' && passwd '$username'"
+arch-chroot /mnt bash -c "useradd -m -G wheel '$username' && passwd '$username'; echo \"$username ALL=(ALL:ALL) ALL\" >> /etc/sudoers"
+
 
 echo -e "\e[1;32mScript has finished! :D\e[0m"
 echo -e "\033[1;36mPlease chroot into drive or reboot to view changes\033[0m"
+
+
+# A few tweaks
+arch=chroot /mnt bash -c "sed -i '/\[multilib\]/{N;s/^#//;}' /etc/pacman.conf"
