@@ -75,7 +75,7 @@ fi
 
 # GRUB Installation
 
-pacstrap -K /mnt base linux linux-firmware
+pacstrap -K /mnt base linux linux-firmware dhcpcd
 genfstab /mnt >> /mnt/etc/fstab
 
 if [ -d /sys/firmware/efi ]; then
