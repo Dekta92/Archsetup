@@ -85,24 +85,26 @@ else
 fi
 
 
+# Necessary packages
+arch-chroot /mnt bash -c "pacamn -S --noconfirm base-devel dosfstools lvm2 mtools nano neovim networkmanager openssh os-prober sudo linux linux-headers linux-lts linux-lts-headers linux-firmware; mkinitcpio -p linux; mkinitcpio -p linux-lts; sed -i '/^#.*en_US.UTF-8/s/^#//' /etc/locale.gen; locale-gen"
+
 
 # Hostname setup and Account Creation
 
 echo -e "\e[1;37mWhat is your desired hostname for the system?\e[0m"
 read hostname
-arch-chroot /mnt bash -c "pacman -S --noconfirm sudo; echo "$hostname" > /etc/hostname"
-
 echo -e "\e[1;37mPlease set the root password for your system now\e[0m"
-arch-chroot /mnt bash -c "sudo passwd"
+arch-chroot /mnt bash -c "echo "$hostname" > /etc/hostname; sudo passwd"
 
 echo -e "\e[1;37mPlease enter your desired username:\e[0m"
 read username
 arch-chroot /mnt bash -c "useradd -m -G wheel '$username' && passwd '$username'; echo \"$username ALL=(ALL:ALL) ALL\" >> /etc/sudoers"
 
 
+# A few tweaks
+arch-chroot /mnt bash -c "sed -i '/\[multilib\]/{N;s/^#//;}' /etc/pacman.conf"
+
+unmount -a
+
 echo -e "\e[1;32mScript has finished! :D\e[0m"
 echo -e "\033[1;36mPlease chroot into drive or reboot to view changes\033[0m"
-
-
-# A few tweaks
-arch=chroot /mnt bash -c "sed -i '/\[multilib\]/{N;s/^#//;}' /etc/pacman.conf"
