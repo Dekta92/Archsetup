@@ -79,18 +79,18 @@ pacstrap -K /mnt base linux linux-firmware dhcpcd
 genfstab /mnt >> /mnt/etc/fstab
 
 if [ -d /sys/firmware/efi ]; then
-    arch-chroot /mnt bash -c "pacman -Sy --noconfirm grub efibootmgr; grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=ArchLinux; grub-mkconfig -o /boot/grub/grub.cfg"
+    arch-chroot /mnt bash -c "pacman -Syu --noconfirm grub efibootmgr; grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=ArchLinux; grub-mkconfig -o /boot/grub/grub.cfg"
 else
-    arch-chroot /mnt bash -c "pacman -Sy --noconfirm grub; grub-install --target=i386-pc $main_drive; grub-mkconfig -o /boot/grub/grub.cfg"
+    arch-chroot /mnt bash -c "pacman -Syu --noconfirm grub; grub-install --target=i386-pc $main_drive; grub-mkconfig -o /boot/grub/grub.cfg"
 fi
 
 
 # I have to have this for some reason otherwise pacman doesn't work
-rm /mnt/etc/pacman.conf; cp /etc/pacman.conf /mnt/etc/pacman.conf
+cp /etc/pacman.conf /mnt/etc/pacman.conf
 
 
 # Necessary packages
-arch-chroot /mnt bash -c "pacman -S --noconfirm multilib base-devel dosfstools lvm2 mtools nano neovim networkmanager openssh os-prober sudo linux linux-headers linux-lts linux-lts-headers linux-firmware; mkinitcpio -p linux; mkinitcpio -p linux-lts; sed -i '/^#.*en_US.UTF-8/s/^#//' /etc/locale.gen; locale-gen"
+arch-chroot /mnt bash -c "pacman -Syyu --noconfirm base-devel dosfstools lvm2 mtools nano neovim networkmanager openssh os-prober sudo linux linux-headers linux-lts linux-lts-headers linux-firmware; mkinitcpio -p linux; mkinitcpio -p linux-lts; sed -i '/^#.*en_US.UTF-8/s/^#//' /etc/locale.gen; locale-gen"
 
 
 # Hostname setup and Account Creation
@@ -98,15 +98,14 @@ arch-chroot /mnt bash -c "pacman -S --noconfirm multilib base-devel dosfstools l
 echo -e "\e[1;37mWhat is your desired hostname for the system?\e[0m"
 read hostname
 echo -e "\e[1;37mPlease set the root password for your system now\e[0m"
-arch-chroot /mnt bash -c "echo "$hostname" > /etc/hostname; passwd"
+arch-chroot /mnt bash -c "echo "$hostname" > /etc/hostname; passwd;"
 
 echo -e "\e[1;37mPlease enter your desired username:\e[0m"
 read username
-arch-chroot /mnt bash -c "useradd -m -G wheel '$username' && passwd '$username'; echo \"$username ALL=(ALL:ALL) ALL\" >> /etc/sudoers"
+arch-chroot /mnt bash -c "useradd -m -G wheel '$username' && passwd '$username'; echo \"$username ALL=(ALL:ALL) ALL\" >> /etc/sudoers; root ALL=(ALL:ALL) ALL\" >> /etc/sudoers"
 
-
-# A few tweaks
-arch-chroot /mnt bash -c "sed -i '/\[multilib\]/{N;s/^#//;}' /etc/pacman.conf"
+# Enabling DHCPCD
+arch-chroot /mnt bash -c "systemctl enable dhcpcd"
 
 unmount -a
 
