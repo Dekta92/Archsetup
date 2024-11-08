@@ -85,8 +85,12 @@ else
 fi
 
 
+# I have to have this for some reason otherwise pacman doesn't work
+rm /mnt/etc/pacman.conf; cp /etc/pacman.conf /mnt/etc/pacman.conf
+
+
 # Necessary packages
-arch-chroot /mnt bash -c "pacamn -S --noconfirm base-devel dosfstools lvm2 mtools nano neovim networkmanager openssh os-prober sudo linux linux-headers linux-lts linux-lts-headers linux-firmware; mkinitcpio -p linux; mkinitcpio -p linux-lts; sed -i '/^#.*en_US.UTF-8/s/^#//' /etc/locale.gen; locale-gen"
+arch-chroot /mnt bash -c "pacman -S --noconfirm multilib base-devel dosfstools lvm2 mtools nano neovim networkmanager openssh os-prober sudo linux linux-headers linux-lts linux-lts-headers linux-firmware; mkinitcpio -p linux; mkinitcpio -p linux-lts; sed -i '/^#.*en_US.UTF-8/s/^#//' /etc/locale.gen; locale-gen"
 
 
 # Hostname setup and Account Creation
@@ -94,7 +98,7 @@ arch-chroot /mnt bash -c "pacamn -S --noconfirm base-devel dosfstools lvm2 mtool
 echo -e "\e[1;37mWhat is your desired hostname for the system?\e[0m"
 read hostname
 echo -e "\e[1;37mPlease set the root password for your system now\e[0m"
-arch-chroot /mnt bash -c "echo "$hostname" > /etc/hostname; sudo passwd"
+arch-chroot /mnt bash -c "echo "$hostname" > /etc/hostname; passwd"
 
 echo -e "\e[1;37mPlease enter your desired username:\e[0m"
 read username
