@@ -102,12 +102,12 @@ arch-chroot /mnt bash -c "echo "$hostname" > /etc/hostname; passwd;"
 
 echo -e "\e[1;37mPlease enter your desired username:\e[0m"
 read username
-arch-chroot /mnt bash -c "useradd -m -G wheel '$username' && passwd '$username'; echo \"$username ALL=(ALL:ALL) ALL\" >> /etc/sudoers; root ALL=(ALL:ALL) ALL\" >> /etc/sudoers"
+arch-chroot /mnt bash -c "useradd -m -G wheel '$username' && passwd '$username' && echo '$username ALL=(ALL:ALL) ALL' >> /etc/sudoers"
 
 # Enabling DHCPCD
 arch-chroot /mnt bash -c "systemctl enable dhcpcd"
 
-unmount -a
+umount -a
 
 echo -e "\e[1;32mScript has finished! :D\e[0m"
 echo -e "\033[1;36mPlease chroot into drive or reboot to view changes\033[0m"
