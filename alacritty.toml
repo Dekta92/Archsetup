@@ -25,3 +25,23 @@ yellow = "0xf0b72f"
 [colors.primary]
 background = "0x0a0c10"
 foreground = "0xf0f3f6"
+
+
+[font]
+size = 11.0
+
+[font.normal]
+family = "JetBrains Mono"
+style = "Regular"
+
+[font.bold]
+family = "JetBrains Mono"
+style = "Bold"
+
+[font.italic]
+family ="JetBrains Mono"
+style = "Italic"
+
+[font.bold_italic]
+family = "JetBrains Mono"
+style = "Bold Italic"
