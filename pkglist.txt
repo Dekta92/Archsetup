@@ -30,10 +30,12 @@ thunar
 thunar-archive-plugin
 thunar-media-tags-plugin
 thunar-volman
+ttf-jetbrains-mono
 tumbler
 unzip
 wget
 wireplumber
+xdg-utils
 xf86-input-synaptics
 xfburn
 xfce4-appfinder
