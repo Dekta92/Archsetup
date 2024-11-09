@@ -1,6 +1,4 @@
-#
 # ~/.bashrc
-#
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
@@ -16,4 +14,3 @@ rfkill unblock wlan0
 iwctl device wlan0 set-property Powered on
 
 clear
-fastfetch
