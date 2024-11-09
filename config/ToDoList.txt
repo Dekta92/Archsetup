@@ -1,3 +1,0 @@
-Add support for XFCE (and lightdm)
-username wasn't in the sudoers file
-root password wasn't set either
