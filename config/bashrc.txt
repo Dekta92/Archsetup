@@ -8,6 +8,7 @@
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 PS1='[\u@\h \W]\$ '
+alias ls='ls --color=auto'
 alias neofetch='fastfetch'
 
 # Making sure Wi-Fi adapter is on
