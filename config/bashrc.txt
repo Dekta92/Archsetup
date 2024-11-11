@@ -13,4 +13,6 @@ alias neofetch='fastfetch'
 rfkill unblock wlan0
 iwctl device wlan0 set-property Powered on
 
+PS1="\033[38;5;51m\u\033[38;5;105m\]@\033[38;5;51m\h \033[38;5;231m\]\W\033[38;5;105m\] \n➤ \[\033[37m\]"
+
 clear
