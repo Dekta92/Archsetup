@@ -3,9 +3,9 @@ pacman -S --noconfirm - < pkglist.txt
 
 # Install dotfiles
 rm ~/.bashrc
-mv config/bashrc.txt ~/.bashrc
+cp config/bashrc.txt ~/.bashrc
 mkdir ~/.config
-mv alacritty.toml ~/.config/alacritty.toml
+cp alacritty.toml ~/.config/alacritty.toml
 
 # Install yay
 git clone https://aur.archlinux.org/yay.git
