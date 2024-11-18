@@ -34,6 +34,7 @@ else
 fi
 echo ""
 
+
 read -p "Do you want to use cfdisk to set up partitions?(Y/n) " response
 response=${response,,}
 if [[ -z "$response" || "$response" == "y" ]]; then
@@ -75,22 +76,23 @@ fi
 
 # GRUB Installation
 
-pacstrap -K /mnt base linux linux-firmware dhcpcd
+pacstrap -K /mnt base linux linux-firmware dhcpcd base-devel grub sof-firmware nano networkmanager
 genfstab /mnt >> /mnt/etc/fstab
 
 if [ -d /sys/firmware/efi ]; then
-    arch-chroot /mnt bash -c "pacman -Syu --noconfirm grub efibootmgr; grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=ArchLinux; grub-mkconfig -o /boot/grub/grub.cfg"
+    arch-chroot /mnt bash -c "pacman -Syu --noconfirm efibootmgr; grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=ArchLinux; grub-mkconfig -o /boot/grub/grub.cfg"
 else
-    arch-chroot /mnt bash -c "pacman -Syu --noconfirm grub; grub-install --target=i386-pc $main_drive; grub-mkconfig -o /boot/grub/grub.cfg"
+    arch-chroot /mnt bash -c "grub-install --target=i386-pc $main_drive; grub-mkconfig -o /boot/grub/grub.cfg"
 fi
 
 
 # I have to have this for some reason otherwise pacman doesn't work
+# I'm guessing it's similiat to like how in the archsetup script there's an option to "Copy ISO Network Configuration"
 cp /etc/pacman.conf /mnt/etc/pacman.conf
 
 
 # Necessary packages
-arch-chroot /mnt bash -c "pacman -Syyu --noconfirm base-devel dosfstools lvm2 mtools nano neovim networkmanager openssh os-prober sudo linux linux-headers linux-lts linux-lts-headers linux-firmware; mkinitcpio -p linux; mkinitcpio -p linux-lts; sed -i '/^#.*en_US.UTF-8/s/^#//' /etc/locale.gen; locale-gen"
+arch-chroot /mnt bash -c "pacman -Syyu --noconfirm dosfstools lvm2 mtools neovim openssh os-prober sudo linux linux-headers linux-lts linux-lts-headers linux-firmware; mkinitcpio -p linux; mkinitcpio -p linux-lts; sed -i '/^#.*en_US.UTF-8/s/^#//' /etc/locale.gen; locale-gen"
 
 
 # Hostname setup and Account Creation
@@ -107,6 +109,7 @@ arch-chroot /mnt bash -c "useradd -m -G wheel '$username' && passwd '$username' 
 # Enabling DHCPCD
 arch-chroot /mnt bash -c "systemctl enable dhcpcd"
 
+# Cleanup
 umount -a
 
 echo -e "\e[1;32mScript has finished! :D\e[0m"
