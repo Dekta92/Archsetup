@@ -6,3 +6,4 @@ alias desktop='startxfce4'
 #iwctl device wlan0 set-property Powered on
 
 sh ~/.config/systemd/user/updatePeriodically.sh
+sh ~/.config/systemd/user/weeklySystemUpdate.sh
