@@ -5,5 +5,4 @@ alias desktop='startxfce4'
 #rfkill unblock wlan0
 #iwctl device wlan0 set-property Powered on
 
-clear
-fastfetch
+sh ~/.config/systemd/user/updatePeriodically.sh

@@ -31,5 +31,7 @@ systemctl --user enable startup.service
 cp config/startupservice.sh /usr/local/sbin/startupservice.sh
 chmod +x /usr/local/sbin/startup.service.sh
 
+cp config/updatePeriodically.sh ~/.config/systemd/user/updatePeriodically.sh
+
 systemctl --user start startup.service
 
